@@ -1,0 +1,51 @@
+{
+  "name": "ibm-iis-commons",
+  "version": "0.0.1",
+  "description": "Library to provide common functionality for IBM InfoSphere Information Server Node.js modules",
+  "main": "./index.js",
+  "files": [
+    "index.js",
+    "docs",
+    "classes",
+    "LICENSE"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "jsdoc": "^3.4.0",
+    "jshint": "^2.9.1",
+    "mocha": "^2.4.5"
+  },
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "scripts": {
+    "test": "jshint --exclude ./node_modules/",
+    "doc": "jsdoc -c jsdoc/config.json"
+  },
+  "keywords": [
+    "ibm",
+    "iis",
+    "infosphere",
+    "information server",
+    "common"
+  ],
+  "author": {
+    "name": "IBM Corp."
+  },
+  "contributors": [
+    {
+      "name": "Christopher Grote",
+      "email": "christopher.grote@uk.ibm.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.ibm.com/christopher-grote/ibm-iis-commons.git"
+  },
+  "bugs": {
+    "url": "https://github.ibm.com/christopher-grote/ibm-iis-commons/issues"
+  },
+  "homepage": "https://github.ibm.com/christopher-grote/ibm-iis-commons"
+}
