@@ -51,6 +51,12 @@ class RestConnection {
   get auth() {
     return this._username + ":" + this._password;
   }
+  get host() {
+    return this._host;
+  }
+  get port() {
+    return this._port;
+  }
   get connection() {
     return this._host + ":" + this._port;
   }
