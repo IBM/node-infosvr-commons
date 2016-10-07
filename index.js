@@ -26,7 +26,9 @@
  */
 
 const RestConnection = require('./classes/rest-connection');
+const EnvironmentContext = require('./classes/environment-context');
 
 if (typeof require === 'function') {
   exports.RestConnection = RestConnection;
+  exports.EnvironmentContext = EnvironmentContext;
 }
