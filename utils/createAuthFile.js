@@ -27,6 +27,8 @@
  * @example
  * // creates an authorisation file for the user 'isadmin' and saves it into /etc/infosvr-auth.cfg (will prompt for password if not provided as an argument)
  * ./createAuthFile.js -u isadmin -f /etc/infosvr-auth.cfg
+ * // creates an authorisation file and saves it into the default location of $HOME/.infosvrauth (will prompt for user and password if not provided as arguments)
+ * ./createAuthFile.js
  */
 
 const commons = require('../');
@@ -40,13 +42,13 @@ const argv = yargs
     .option('f', {
       alias: 'file',
       describe: 'File into which to store authorisation details',
-      demand: true, requiresArg: true, type: 'string'
+      demand: true, requiresArg: true, type: 'string',
+      default: process.env.HOME + "/.infosvrauth"
     })
     .option('u', {
       alias: 'username',
       describe: 'Username for authenticating into Information Server',
-      demand: true, requiresArg: true, type: 'string',
-      default: "isadmin"
+      demand: false, requiresArg: true, type: 'string'
     })
     .option('p', {
       alias: 'password',
@@ -58,41 +60,43 @@ const argv = yargs
     .wrap(yargs.terminalWidth())
     .argv;
 
-function createFile() {
-  const EnvCtx = new commons.EnvironmentContext();
-  EnvCtx.createAuthFile(argv.username, argv.password, argv.file);
-}
+const EnvCtx = new commons.EnvironmentContext();
 
 if (typeof argv.password === 'undefined' || argv.password === null || argv.password === "") {
-
-  const input = {
-    properties: {
-      password1: {
-        hidden: true,
-        required: true,
-        message: "Please enter the password for '" + argv.username + "': "
-      },
-      password2: {
-        hidden: true,
-        required: true,
-        message: "Please enter the same password again: "
-      }
-    }
-  };
-
-  prompt.message = "";
-  prompt.delimiter = "";
-
-  prompt.start();
-  prompt.get(input, function (err, result) {
-    if (result.password1 !== result.password2) {
-      console.error("Passwords received were different!");
-      process.exit(1);
-    } else {
-      argv.password = result.password1;
-      createFile();
-    }
-  });
-} else {
-  createFile();
+  argv.passwordCheck = argv.password;
 }
+
+prompt.override = argv;
+
+const input = {
+  properties: {
+    username: {
+      required: true,
+      message: "Please enter a username: "
+    },
+    password: {
+      hidden: true,
+      required: true,
+      message: "Please enter the user's password: "
+    },
+    passwordCheck: {
+      hidden: true,
+      required: true,
+      message: "Please enter the same password again: "
+    }
+  }
+};
+
+prompt.message = "";
+prompt.delimiter = "";
+
+prompt.start();
+prompt.get(input, function (err, result) {
+  if (result.username === "") {
+    throw new Error("No username provided.");
+  } else if (result.password !== result.passwordCheck) {
+    throw new Error("Passwords entered were not identical.");
+  } else {
+    EnvCtx.createAuthFileFromParams(result.username, result.password, argv.file);
+  }
+});

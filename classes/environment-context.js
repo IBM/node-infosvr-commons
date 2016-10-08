@@ -121,6 +121,14 @@ class EnvironmentContext {
     return this._patchHistory;
   }
 
+  get domainHost() {
+    return this._tierToHosts.DOMAIN;
+  }
+
+  get domainPort() {
+    return this._isConsolePort;
+  }
+
   get domain() {
     return this._tierToHosts.DOMAIN + ":" + this._isConsolePort;
   }
@@ -131,14 +139,15 @@ class EnvironmentContext {
 
   /**
    * Creates an authorisation file that can be used with most Information Server CLI tools
-   * (so that passwords are not shown in-the-clear on the command line)
+   * (so that passwords are not shown in-the-clear on the command line) -- based on the 
+   * values provided
    * 
    * @function
-   * @param {string} username
-   * @param {string} password
-   * @param {string} file - full path to where the file should be created
+   * @param {string} username - username to use for authentication
+   * @param {string} password - password to use for authentication
+   * @param {string} file - file into which to store the details
    */
-  createAuthFile(username, password, file) {
+  createAuthFileFromParams(username, password, file) {
     const encryptCmd = this.asbhome + path.sep + "bin" + path.sep + "encrypt.sh " + password;
     const result = shell.exec(encryptCmd, {"shell": "/bin/bash", silent: true});
     if (result.code !== 0) {
@@ -154,6 +163,13 @@ class EnvironmentContext {
   }
 
   get authFile() {
+    if (typeof this._authFile === 'undefined' || this._authFile === null || this._authFile === "") {
+      if (shell.test('-f', "~/.infosvrauth")) {
+        this._authFile = process.env.HOME + path.sep + ".infosvrauth";
+      } else {
+        throw new Error("ERROR: Unable to find an authorisation file.");
+      }
+    }
     return this._authFile;
   }
 
