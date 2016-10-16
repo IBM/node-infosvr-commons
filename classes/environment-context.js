@@ -43,6 +43,8 @@ class EnvironmentContext {
    */
   constructor(installLocation) {
 
+    this._username = "";
+    this._password = "";
     this._select = xpath.useNamespaces({"installreg": "http://www.ibm.com/LocalInstallRegistry"});
     this._bOnHost = false;
     this._tierToHosts = {};
@@ -153,6 +155,8 @@ class EnvironmentContext {
     if (result.code !== 0) {
       console.error("Unable to encrypt password for authorisation file: exit code " + result.code);
     }
+    this._username = username;
+    this._password = result.stdout.replace("\n", "");
     const data = "" + 
         "user=" + username + "\n" +
         "password=" + result.stdout +
@@ -175,6 +179,36 @@ class EnvironmentContext {
 
   set authFile(file) {
     this._authFile = file;
+  }
+
+  get username() {
+    if (this._username === "") {
+      const file = this.authFile;
+      const authDetails = fs.readFileSync(file, 'utf8');
+      const aLines = authDetails.split("\n");
+      for (let i = 0; i < aLines.length; i++) {
+        if (aLines[i].startsWith("user=")) {
+          this._username = aLines[i].split("=")[1];
+          i = aLines.length;
+        }
+      }
+    }
+    return this._username;
+  }
+
+  get password() {
+    if (this._password === "") {
+      const file = this.authFile;
+      const authDetails = fs.readFileSync(file, 'utf8');
+      const aLines = authDetails.split("\n");
+      for (let i = 0; i < aLines.length; i++) {
+        if (aLines[i].startsWith("password=")) {
+          this._password = aLines[i].substring(aLines[i].indexOf("=") + 1);
+          i = aLines.length;
+        }
+      }
+    }
+    return this._password;
   }
 
 }
