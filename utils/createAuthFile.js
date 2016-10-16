@@ -62,7 +62,7 @@ const argv = yargs
 
 const EnvCtx = new commons.EnvironmentContext();
 
-if (typeof argv.password === 'undefined' || argv.password === null || argv.password === "") {
+if (typeof argv.password !== 'undefined' && argv.password !== null && argv.password !== "") {
   argv.passwordCheck = argv.password;
 }
 
