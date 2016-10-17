@@ -30,6 +30,8 @@ const xpath = require('xpath');
 const path = require('path');
 const fs = require('fs');
 
+const RestConnection = require('./rest-connection');
+
 /**
  * @namespace
  */
@@ -45,6 +47,8 @@ class EnvironmentContext {
 
     this._username = "";
     this._password = "";
+    this._clearPassword = "";
+    this._restConnection = null;
     this._select = xpath.useNamespaces({"installreg": "http://www.ibm.com/LocalInstallRegistry"});
     this._bOnHost = false;
     this._tierToHosts = {};
@@ -151,6 +155,7 @@ class EnvironmentContext {
    */
   createAuthFileFromParams(username, password, file) {
     const encryptCmd = this.asbhome + path.sep + "bin" + path.sep + "encrypt.sh " + password;
+    this._clearPassword = password;
     const result = shell.exec(encryptCmd, {"shell": "/bin/bash", silent: true});
     if (result.code !== 0) {
       console.error("Unable to encrypt password for authorisation file: exit code " + result.code);
@@ -209,6 +214,13 @@ class EnvironmentContext {
       }
     }
     return this._password;
+  }
+
+  get restConnection() {
+    if (this._restConnection === null) {
+      this._restConnection = new RestConnection(this.username, this.password, this.domainHost, this.domainPort);
+    }
+    return this._restConnection;
   }
 
 }
