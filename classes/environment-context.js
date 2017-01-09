@@ -27,6 +27,13 @@ const RestConnection = require('./rest-connection');
 /**
  * EnvironmentContext class -- for encapsulating the context of an Information Server environment (NOTE: always run from Engine tier)
  * @license Apache-2.0
+ * @example
+ * const commons = require('ibm-iis-commons');
+ * const envCtx = new commons.EnvironmentContext();
+ * console.log("Host details: " + envCtx.domainHost + ":" + envCtx.domainPort);
+ * console.log("Version     : " + envCtx.currentVersion);
+ * console.log("Patches     : " + envCtx.installedPatches);
+ * console.loc("$DSHOME     : " + envCtx.dshome);
  */
 class EnvironmentContext {
 

@@ -8,6 +8,15 @@
 
 RestConnection class -- for handling connectivity to REST APIs
 
+**Examples**
+
+```javascript
+const commons = require('ibm-iis-commons');
+const restConnect = new commons.RestConnection('isadmin', 'isadmin-password', 'localhost', '9445');
+const igcrest = require('ibm-igc-rest');
+igcrest.setConnection(restConnect);
+```
+
 **Meta**
 
 -   **license**: Apache-2.0
@@ -26,6 +35,17 @@ Sets up a REST API connection
 ## EnvironmentContext
 
 EnvironmentContext class -- for encapsulating the context of an Information Server environment (NOTE: always run from Engine tier)
+
+**Examples**
+
+```javascript
+const commons = require('ibm-iis-commons');
+const envCtx = new commons.EnvironmentContext();
+console.log("Host details: " + envCtx.domainHost + ":" + envCtx.domainPort);
+console.log("Version     : " + envCtx.currentVersion);
+console.log("Patches     : " + envCtx.installedPatches);
+console.loc("$DSHOME     : " + envCtx.dshome);
+```
 
 **Meta**
 
