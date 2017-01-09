@@ -16,14 +16,6 @@
 
 "use strict";
 
-/**
- * @file EnvironmentContext class -- for encapsulating the context of an Information Server environment (NOTE: always run from Engine tier)
- * @requires shelljs
- * @requires xmldom
- * @requires xpath
- * @license Apache-2.0
- */
-
 const shell = require('shelljs');
 const xmldom = require('xmldom');
 const xpath = require('xpath');
@@ -33,7 +25,8 @@ const fs = require('fs');
 const RestConnection = require('./rest-connection');
 
 /**
- * @namespace
+ * EnvironmentContext class -- for encapsulating the context of an Information Server environment (NOTE: always run from Engine tier)
+ * @license Apache-2.0
  */
 class EnvironmentContext {
 

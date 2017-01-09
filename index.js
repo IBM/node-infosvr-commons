@@ -16,6 +16,9 @@
 
 "use strict";
 
+const RestConnection = require('./classes/rest-connection');
+const EnvironmentContext = require('./classes/environment-context');
+
 /**
  * @file Re-usable functions for interacting with IBM InfoSphere Information Server via Node.js modules
  * @license Apache-2.0
@@ -24,9 +27,7 @@
 /**
  * @module ibm-iis-commons
  */
-
-const RestConnection = require('./classes/rest-connection');
-const EnvironmentContext = require('./classes/environment-context');
+const _unused = "For documentation generation purposes...";
 
 if (typeof require === 'function') {
   exports.RestConnection = RestConnection;

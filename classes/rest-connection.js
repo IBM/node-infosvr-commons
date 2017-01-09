@@ -17,12 +17,8 @@
 "use strict";
 
 /**
- * @file RestConnection class -- for handling connectivity to REST APIs
+ * RestConnection class -- for handling connectivity to REST APIs
  * @license Apache-2.0
- */
-
-/**
- * @namespace
  */
 class RestConnection {
 
