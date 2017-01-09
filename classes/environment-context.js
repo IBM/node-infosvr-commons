@@ -103,42 +103,82 @@ class EnvironmentContext {
 
   }
 
+  /**
+   * Get the installation location of Information Server
+   * @return {string}
+   */
   get ishome() {
     return this._ishome;
   }
 
+  /**
+   * Get the installation location of DataStage
+   * @return {string}
+   */
   get dshome() {
     return this._dshome;
   }
 
+  /**
+   * Get the installation location of the ASBNode
+   * @return {string}
+   */
   get asbhome() {
     return this._ishome + path.sep + "ASBNode";
   }
 
+  /**
+   * Get the fully-qualified location of the istool command
+   * @return {string}
+   */
   get istool() {
     return this._ishome + path.sep + "Clients" + path.sep + "istools" + path.sep + "cli" + path.sep + "istool.sh";
   }
 
+  /**
+   * Get the version of the Information Server installation
+   * @return {string}
+   */
   get currentVersion() {
     return this._currentVersion;
   }
 
+  /**
+   * Get an array of installed patches on the Information Server environment
+   * @return {string[]}
+   */
   get installedPatches() {
     return this._patchHistory;
   }
 
+  /**
+   * Get the hostname of the Information Server domain (services) tier
+   * @return {string}
+   */
   get domainHost() {
     return this._tierToHosts.DOMAIN;
   }
 
+  /**
+   * Get the port number of the Information Server domain (services) tier
+   * @return {string}
+   */
   get domainPort() {
     return this._isConsolePort;
   }
 
+  /**
+   * Get fully-qualified Information Server domain (services) tier information -- host:port
+   * @return {string}
+   */
   get domain() {
     return this._tierToHosts.DOMAIN + ":" + this._isConsolePort;
   }
 
+  /**
+   * Get the hostname of the Information Server engine tier
+   * @return {string}
+   */
   get engine() {
     return this._tierToHosts.ENGINE.toUpperCase();
   }
@@ -171,6 +211,10 @@ class EnvironmentContext {
     this.authFile = file;
   }
 
+  /**
+   * Get the fully-qualified location of the authorisation file (if any)
+   * @return {string}
+   */
   get authFile() {
     if (typeof this._authFile === 'undefined' || this._authFile === null || this._authFile === "") {
       if (shell.test('-f', "~/.infosvrauth")) {
@@ -182,10 +226,18 @@ class EnvironmentContext {
     return this._authFile;
   }
 
+  /**
+   * Set the location of the authorisation file
+   * @param file {string}
+   */
   set authFile(file) {
     this._authFile = file;
   }
 
+  /**
+   * Get the username, from the authorisation file if needed
+   * @return {string}
+   */
   get username() {
     if (this._username === "") {
       const file = this.authFile;
@@ -201,6 +253,10 @@ class EnvironmentContext {
     return this._username;
   }
 
+  /**
+   * Get the user's password, from the authorisation file if needed
+   * @return {string}
+   */
   get password() {
     if (this._password === "") {
       const file = this.authFile;
@@ -216,6 +272,11 @@ class EnvironmentContext {
     return this._password;
   }
 
+  /**
+   * Get a RestConnection object allowing REST API's to connect to this environment
+   * @return {RestConnection}
+   * @see module:ibm-iis-commons~RestConnection
+   */
   get restConnection() {
     if (this._restConnection === null) {
       this._restConnection = new RestConnection(this.username, this.password, this.domainHost, this.domainPort);

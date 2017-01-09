@@ -59,6 +59,66 @@ Sets up everything we can determine about the environment from the current syste
 
 -   `installLocation` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** specifies the root of the installation ('/opt/IBM/InformationServer' by default)
 
+### ishome
+
+Get the installation location of Information Server
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### dshome
+
+Get the installation location of DataStage
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### asbhome
+
+Get the installation location of the ASBNode
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### istool
+
+Get the fully-qualified location of the istool command
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### currentVersion
+
+Get the version of the Information Server installation
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### installedPatches
+
+Get an array of installed patches on the Information Server environment
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
+### domainHost
+
+Get the hostname of the Information Server domain (services) tier
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### domainPort
+
+Get the port number of the Information Server domain (services) tier
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### domain
+
+Get fully-qualified Information Server domain (services) tier information -- host:port
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### engine
+
+Get the hostname of the Information Server engine tier
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
 ### createAuthFileFromParams
 
 Creates an authorisation file that can be used with most Information Server CLI tools
@@ -70,3 +130,35 @@ values provided
 -   `username` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** username to use for authentication
 -   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** password to use for authentication
 -   `file` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** file into which to store the details
+
+### authFile
+
+Get the fully-qualified location of the authorisation file (if any)
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### authFile
+
+Set the location of the authorisation file
+
+**Parameters**
+
+-   `file`  {string}
+
+### username
+
+Get the username, from the authorisation file if needed
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### password
+
+Get the user's password, from the authorisation file if needed
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### restConnection
+
+Get a RestConnection object allowing REST API's to connect to this environment
+
+Returns **[RestConnection](#restconnection)** 
