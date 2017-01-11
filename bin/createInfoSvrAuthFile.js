@@ -31,7 +31,7 @@
  * ./createAuthFile.js
  */
 
-const commons = require('../');
+const commons = require('ibm-iis-commons');
 const prompt = require('prompt');
 prompt.colors = false;
 
