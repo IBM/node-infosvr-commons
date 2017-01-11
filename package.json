@@ -45,16 +45,16 @@
   "contributors": [
     {
       "name": "Christopher Grote",
-      "email": "christopher.grote@uk.ibm.com"
+      "email": "chris@thegrotes.net"
     }
   ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.ibm.com/christopher-grote/ibm-iis-commons.git"
+    "url": "https://github.com/cmgrote/ibm-iis-commons.git"
   },
   "bugs": {
-    "url": "https://github.ibm.com/christopher-grote/ibm-iis-commons/issues"
+    "url": "https://github.com/cmgrote/ibm-iis-commons/issues"
   },
-  "homepage": "https://github.ibm.com/christopher-grote/ibm-iis-commons"
+  "homepage": "https://github.com/cmgrote/ibm-iis-commons"
 }
