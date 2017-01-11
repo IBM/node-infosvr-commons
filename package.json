@@ -1,11 +1,11 @@
 {
   "name": "ibm-iis-commons",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Library to provide common functionality for IBM InfoSphere Information Server Node.js modules",
   "main": "./index.js",
   "files": [
     "index.js",
-    "docs",
+    "bin",
     "classes",
     "utils",
     "LICENSE"
