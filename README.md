@@ -6,10 +6,6 @@
 
 Re-usable functions for inferring properties of and interacting with an IBM InfoSphere Information Server environment
 
-**Meta**
-
--   **license**: Apache-2.0
-
 ## RestConnection
 
 RestConnection class -- for handling connectivity to REST APIs
@@ -22,10 +18,6 @@ const restConnect = new commons.RestConnection('isadmin', 'isadmin-password', 'l
 const igcrest = require('ibm-igc-rest');
 igcrest.setConnection(restConnect);
 ```
-
-**Meta**
-
--   **license**: Apache-2.0
 
 ### constructor
 
@@ -52,10 +44,6 @@ console.log("Version     : " + envCtx.currentVersion);
 console.log("Patches     : " + envCtx.installedPatches);
 console.loc("$DSHOME     : " + envCtx.dshome);
 ```
-
-**Meta**
-
--   **license**: Apache-2.0
 
 ### constructor
 

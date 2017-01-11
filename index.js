@@ -22,7 +22,6 @@ const EnvironmentContext = require('./classes/environment-context');
 /**
  * Re-usable functions for inferring properties of and interacting with an IBM InfoSphere Information Server environment
  * @module ibm-iis-commons
- * @license Apache-2.0
  */
 if (typeof require === 'function') {
   exports.RestConnection = RestConnection;

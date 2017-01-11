@@ -18,7 +18,6 @@
 
 /**
  * RestConnection class -- for handling connectivity to REST APIs
- * @license Apache-2.0
  * @example
  * const commons = require('ibm-iis-commons');
  * const restConnect = new commons.RestConnection('isadmin', 'isadmin-password', 'localhost', '9445');
