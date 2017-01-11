@@ -4,6 +4,12 @@
 
 ## ibm-iis-commons
 
+Re-usable functions for inferring properties of and interacting with an IBM InfoSphere Information Server environment
+
+**Meta**
+
+-   **license**: Apache-2.0
+
 ## RestConnection
 
 RestConnection class -- for handling connectivity to REST APIs

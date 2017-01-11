@@ -20,15 +20,10 @@ const RestConnection = require('./classes/rest-connection');
 const EnvironmentContext = require('./classes/environment-context');
 
 /**
- * @file Re-usable functions for interacting with IBM InfoSphere Information Server via Node.js modules
+ * Re-usable functions for inferring properties of and interacting with an IBM InfoSphere Information Server environment
+ * @module ibm-iis-commons
  * @license Apache-2.0
  */
-
-/**
- * @module ibm-iis-commons
- */
-const _unused = "For documentation generation purposes...";
-
 if (typeof require === 'function') {
   exports.RestConnection = RestConnection;
   exports.EnvironmentContext = EnvironmentContext;
