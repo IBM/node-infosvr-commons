@@ -50,8 +50,12 @@ class EnvironmentContext {
     this._restConnection = null;
     this._select = xpath.useNamespaces({"installreg": "http://www.ibm.com/LocalInstallRegistry"});
     this._bOnHost = false;
+    this._bHaveVersionXML = false;
     this._tierToHosts = {};
+    this._isConsolePort = "";
     this._ishome = "/opt/IBM/InformationServer";
+    this._dshome = this._ishome + path.sep + "Server" + path.sep + "DSEngine";
+    this._patchHistory = [];
     if (typeof installLocation !== 'undefined' && installLocation !== null) {
       this._ishome = installLocation;
     }
@@ -63,41 +67,41 @@ class EnvironmentContext {
       console.error("WARNING: This does not appear to be the engine tier -- you may run into problems...");
       this._bOnHost = true;
     } else {
-      console.error("Unable to find Information Server installation.");
-      throw new Error("Unable to find Information Server installation.");
+      console.error("WARNING: No Information Server installation on this host, functionality will be limited.");
     }
 
-    // Parse out details from Version.xml
-    const versionXML = this._ishome + path.sep + "Version.xml";
-    if (shell.test('-f', versionXML)) {
-
-      const _versionXML = new xmldom.DOMParser().parseFromString(fs.readFileSync(versionXML, 'utf8'));
-
-      const nInstallType = this._select("/installreg:LocalInstallRegistry/installreg:InstallType", _versionXML)[0];
-      this._currentVersion = nInstallType.getAttribute("currentVersion");
+    if (this._bOnHost) {
+      // Parse out details from Version.xml -- only need to attempt this if we're on an Information Server host
+      const versionXML = this._ishome + path.sep + "Version.xml";
+      if (shell.test('-f', versionXML)) {
   
-      const nlPatches = this._select("/installreg:LocalInstallRegistry/installreg:History/installreg:HistoricalEvent[@installType='PATCH']", _versionXML);
-      this._patchHistory = [];
-      for (let i = 0; i < nlPatches.length; i++) {
-        this._patchHistory.push({
-          patchId: nlPatches[i].getAttribute("installerId"),
-          patchDate: nlPatches[i].getAttribute("eventDate")
-        });
-      }
+        const _versionXML = new xmldom.DOMParser().parseFromString(fs.readFileSync(versionXML, 'utf8'));
+        this._bHaveVersionXML = true;
   
-      const nlProducts = this._select("/installreg:LocalInstallRegistry/installreg:Products/installreg:Product", _versionXML);
-      this._installedModules = [];
-      for (let i = 0; i < nlProducts.length; i++) {
-        this._installedModules.push(nlProducts[i].getAttribute("productId"));
+        const nInstallType = this._select("/installreg:LocalInstallRegistry/installreg:InstallType", _versionXML)[0];
+        this._currentVersion = nInstallType.getAttribute("currentVersion");
+    
+        const nlPatches = this._select("/installreg:LocalInstallRegistry/installreg:History/installreg:HistoricalEvent[@installType='PATCH']", _versionXML);
+        for (let i = 0; i < nlPatches.length; i++) {
+          this._patchHistory.push({
+            patchId: nlPatches[i].getAttribute("installerId"),
+            patchDate: nlPatches[i].getAttribute("eventDate")
+          });
+        }
+    
+        const nlProducts = this._select("/installreg:LocalInstallRegistry/installreg:Products/installreg:Product", _versionXML);
+        this._installedModules = [];
+        for (let i = 0; i < nlProducts.length; i++) {
+          this._installedModules.push(nlProducts[i].getAttribute("productId"));
+        }
+  
+        this._isConsolePort = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='is.console.port']", _versionXML)[0].getAttribute("value");
+        this._tierToHosts.DOMAIN = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.server.host']", _versionXML)[0].getAttribute("value");
+        this._tierToHosts.ENGINE = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.agent.host']", _versionXML)[0].getAttribute("value");
+  
+      } else {
+        console.error("WARNING: Unable to find Version.xml -- Information Server install appears incomplete.");
       }
-
-      this._isConsolePort = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='is.console.port']", _versionXML)[0].getAttribute("value");
-      this._tierToHosts.DOMAIN = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.server.host']", _versionXML)[0].getAttribute("value");
-      this._tierToHosts.ENGINE = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.agent.host']", _versionXML)[0].getAttribute("value");
-
-    } else {
-      console.error("Unable to find Version.xml -- Information Server install appears incomplete.");
-      throw new Error("Unable to find Version.xml -- Information Server install appears incomplete.");
     }
 
   }
@@ -139,7 +143,11 @@ class EnvironmentContext {
    * @return {string}
    */
   get currentVersion() {
-    return this._currentVersion;
+    if (this._bHaveVersionXML) {
+      return this._currentVersion;
+    } else {
+      return "Unknown";
+    }
   }
 
   /**
@@ -155,6 +163,17 @@ class EnvironmentContext {
    * @return {string}
    */
   get domainHost() {
+    if (!this._tierToHosts.hasOwnProperty("DOMAIN")) {
+      const file = this.authFile;
+      const authDetails = fs.readFileSync(file, 'utf8');
+      const aLines = authDetails.split("\n");
+      for (let i = 0; i < aLines.length; i++) {
+        if (aLines[i].startsWith("domain=")) {
+          this._tierToHosts.DOMAIN = aLines[i].split("=")[1].split(":")[0];
+          i = aLines.length;
+        }
+      }
+    }
     return this._tierToHosts.DOMAIN;
   }
 
@@ -163,6 +182,17 @@ class EnvironmentContext {
    * @return {string}
    */
   get domainPort() {
+    if (this._isConsolePort === "") {
+      const file = this.authFile;
+      const authDetails = fs.readFileSync(file, 'utf8');
+      const aLines = authDetails.split("\n");
+      for (let i = 0; i < aLines.length; i++) {
+        if (aLines[i].startsWith("domain=")) {
+          this._isConsolePort = aLines[i].split("=")[1].split(":")[1];
+          i = aLines.length;
+        }
+      }
+    }
     return this._isConsolePort;
   }
 
@@ -171,7 +201,7 @@ class EnvironmentContext {
    * @return {string}
    */
   get domain() {
-    return this._tierToHosts.DOMAIN + ":" + this._isConsolePort;
+    return this.domainHost + ":" + this.domainPort;
   }
 
   /**
@@ -179,6 +209,17 @@ class EnvironmentContext {
    * @return {string}
    */
   get engine() {
+    if (!this._tierToHosts.hasOwnProperty("ENGINE")) {
+      const file = this.authFile;
+      const authDetails = fs.readFileSync(file, 'utf8');
+      const aLines = authDetails.split("\n");
+      for (let i = 0; i < aLines.length; i++) {
+        if (aLines[i].startsWith("server=")) {
+          this._tierToHosts.ENGINE = aLines[i].split("=")[1];
+          i = aLines.length;
+        }
+      }
+    }
     return this._tierToHosts.ENGINE.toUpperCase();
   }
 
@@ -195,6 +236,10 @@ class EnvironmentContext {
   createAuthFileFromParams(username, password, file) {
     const encryptCmd = this.asbhome + path.sep + "bin" + path.sep + "encrypt.sh " + password;
     this._clearPassword = password;
+    if (!this._bOnHost) {
+      console.error("ERROR: An authorisation file can only be created on Information Server host itself.");
+      throw new Error("An authorisation file can only be created on Information Server host itself.");
+    }
     const result = shell.exec(encryptCmd, {"shell": "/bin/bash", silent: true});
     if (result.code !== 0) {
       console.error("Unable to encrypt password for authorisation file: exit code " + result.code);
@@ -273,12 +318,13 @@ class EnvironmentContext {
 
   /**
    * Get a RestConnection object allowing REST API's to connect to this environment
+   * @param {string} password - unencrypted password to use for REST connection (other details taken from authorisation file automatically)
    * @return {RestConnection}
    * @see module:ibm-iis-commons~RestConnection
    */
-  get restConnection() {
-    if (this._restConnection === null) {
-      this._restConnection = new RestConnection(this.username, this.password, this.domainHost, this.domainPort);
+  getRestConnection(password) {
+    if (typeof this._restConnection === 'undefined' || this._restConnection === null) {
+      this._restConnection = new RestConnection(this.username, password, this.domainHost, this.domainPort);
     }
     return this._restConnection;
   }

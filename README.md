@@ -151,8 +151,12 @@ Get the user's password, from the authorisation file if needed
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
-### restConnection
+### getRestConnection
 
 Get a RestConnection object allowing REST API's to connect to this environment
+
+**Parameters**
+
+-   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** unencrypted password to use for REST connection (other details taken from authorisation file automatically)
 
 Returns **[RestConnection](#restconnection)** 
