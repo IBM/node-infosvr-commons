@@ -29,6 +29,43 @@ Sets up a REST API connection
 -   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** password to use when authenticating to REST API
 -   `host` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** hostname of the domain tier
 -   `port` **int** port number of the domain tier
+-   `maxSockets` **int?** the maximum number of sockests to support concurrently on the host
+
+### auth
+
+Get the authentication object for a REST connection
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** a hash of 'user' and 'pass' basic authentication details
+
+### host
+
+Get the hostname for the REST connection
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### port
+
+Get the port for the REST connection
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### connection
+
+Get the qualified connection details for the REST connection (host:port)
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### baseURL
+
+Get the fully-qualified base SSL URL for the REST connection
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### agent
+
+Get the https.Agent object for the REST connection
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ## EnvironmentContext
 

@@ -16,6 +16,8 @@
 
 "use strict";
 
+const https = require('https');
+
 /**
  * RestConnection class -- for handling connectivity to REST APIs
  * @example
@@ -34,8 +36,9 @@ class RestConnection {
    * @param {string} password - password to use when authenticating to REST API
    * @param {string} host - hostname of the domain tier
    * @param {int} port - port number of the domain tier
+   * @param {int} [maxSockets] - the maximum number of sockests to support concurrently on the host
    */
-  constructor(username, password, host, port) {
+  constructor(username, password, host, port, maxSockets) {
     if (username === undefined || username === "" || password === undefined || password === "") {
       throw new Error("Incomplete authentication information -- missing username or password (or both).");
     }
@@ -46,19 +49,61 @@ class RestConnection {
     }
     this._host = host;
     this._port = port;
+    if (maxSockets === undefined || maxSockets === "") {
+      maxSockets = 100;
+    }
+    this._agent = new https.Agent({
+      maxSockets: maxSockets,
+      keepAlive: false
+    });
   }
 
+  /**
+   * Get the authentication object for a REST connection
+   * @return {Object} - a hash of 'user' and 'pass' basic authentication details
+   */
   get auth() {
-    return this._username + ":" + this._password;
+    return { 'user': this._username, 'pass': this._password };
   }
+
+  /**
+   * Get the hostname for the REST connection
+   * @return {string}
+   */
   get host() {
     return this._host;
   }
+
+  /**
+   * Get the port for the REST connection
+   * @return {string}
+   */
   get port() {
     return this._port;
   }
+
+  /**
+   * Get the qualified connection details for the REST connection (host:port)
+   * @return {string}
+   */
   get connection() {
     return this._host + ":" + this._port;
+  }
+
+  /**
+   * Get the fully-qualified base SSL URL for the REST connection
+   * @return {string}
+   */
+  get baseURL() {
+    return 'https://' + this.connection;
+  }
+
+  /**
+   * Get the https.Agent object for the REST connection
+   * @return {Object}
+   */
+  get agent() {
+    return this._agent;
   }
 
 }
