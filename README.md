@@ -89,6 +89,7 @@ Sets up everything we can determine about the environment from the current syste
 **Parameters**
 
 -   `installLocation` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** specifies the root of the installation ('/opt/IBM/InformationServer' by default)
+-   `authFile` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** specifies the location of an authorisation file from which information can be retrieved (if available)
 
 ### ishome
 
@@ -155,6 +156,7 @@ Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 Creates an authorisation file that can be used with most Information Server CLI tools
 (so that passwords are not shown in-the-clear on the command line) -- based on the 
 values provided
+NOTE: this must be run from the Information Server environment directly (cannot be run remotely)
 
 **Parameters**
 
@@ -188,6 +190,18 @@ Get the user's password, from the authorisation file if needed
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
+### remoteConnectionString
+
+Get the remote connection string, from the authorisation file if needed
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### remoteCopyString
+
+Get the remote copy string, from the authorisation file if needed
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
 ### getRestConnection
 
 Get a RestConnection object allowing REST API's to connect to this environment
@@ -197,3 +211,30 @@ Get a RestConnection object allowing REST API's to connect to this environment
 -   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** unencrypted password to use for REST connection (other details taken from authorisation file automatically)
 
 Returns **[RestConnection](#restconnection)** 
+
+### runInfoSvrCommand
+
+Run the provided command on the Information Server environment
+
+**Parameters**
+
+-   `command` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### copyFile
+
+Copy the provided source file to the target location on the Information Server environment
+
+**Parameters**
+
+-   `source` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `target` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### removeFile
+
+Remove the specified file from the Information Server environment
+
+**Parameters**
+
+-   `source` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `target` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `file`  
