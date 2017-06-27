@@ -29,7 +29,7 @@ Sets up a REST API connection
 -   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** password to use when authenticating to REST API
 -   `host` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** hostname of the domain tier
 -   `port` **int** port number of the domain tier
--   `maxSockets` **int?** the maximum number of sockests to support concurrently on the host
+-   `maxSockets` **int?** the maximum number of sockets to support concurrently on the host
 
 ### auth
 
@@ -209,6 +209,7 @@ Get a RestConnection object allowing REST API's to connect to this environment
 **Parameters**
 
 -   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** unencrypted password to use for REST connection (other details taken from authorisation file automatically)
+-   `maxSockets` **int?** the maximum number of sockets to support concurrently on the host
 
 Returns **[RestConnection](#restconnection)** 
 

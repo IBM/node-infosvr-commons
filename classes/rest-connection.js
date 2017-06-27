@@ -36,7 +36,7 @@ class RestConnection {
    * @param {string} password - password to use when authenticating to REST API
    * @param {string} host - hostname of the domain tier
    * @param {int} port - port number of the domain tier
-   * @param {int} [maxSockets] - the maximum number of sockests to support concurrently on the host
+   * @param {int} [maxSockets] - the maximum number of sockets to support concurrently on the host
    */
   constructor(username, password, host, port, maxSockets) {
     if (username === undefined || username === "" || password === undefined || password === "") {

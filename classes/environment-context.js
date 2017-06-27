@@ -21,6 +21,7 @@ const xmldom = require('xmldom');
 const xpath = require('xpath');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 
 const RestConnection = require('./rest-connection');
 
@@ -423,12 +424,15 @@ class EnvironmentContext {
   /**
    * Get a RestConnection object allowing REST API's to connect to this environment
    * @param {string} password - unencrypted password to use for REST connection (other details taken from authorisation file automatically)
+   * @param {int} [maxSockets] - the maximum number of sockets to support concurrently on the host
    * @return {RestConnection}
    * @see module:ibm-iis-commons~RestConnection
    */
-  getRestConnection(password) {
+  getRestConnection(password, maxSockets) {
     if (typeof this._restConnection === 'undefined' || this._restConnection === null) {
-      this._restConnection = new RestConnection(this.username, password, this.domainHost, this.domainPort);
+      this._restConnection = new RestConnection(this.username, password, this.domainHost, this.domainPort, maxSockets);
+    } else if (maxSockets !== undefined && maxSockets !== null && maxSockets !== "") {
+      this._restConnection._agent.maxSockets = maxSockets;
     }
     return this._restConnection;
   }
