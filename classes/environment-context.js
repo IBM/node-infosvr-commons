@@ -21,7 +21,6 @@ const xmldom = require('xmldom');
 const xpath = require('xpath');
 const path = require('path');
 const fs = require('fs');
-const https = require('https');
 
 const RestConnection = require('./rest-connection');
 
@@ -142,10 +141,15 @@ class EnvironmentContext {
   _executeCommandRemotely(command) {
     if (this.remoteConnectionString !== "") {
       this._checkForRemoteAuthFile();
-      const sshString = this.remoteConnectionString + " \"" + command.replace(this.authFile, '~/.infosvrauth_remoteCopy') + "\"";
-      const result = shell.exec(sshString, { "shell": "/bin/bash", silent: true });
+      let execString = "";
+      if (this.remoteConnectionString.startsWith("ssh")) {
+        execString = this.remoteConnectionString + " \"" + command.replace(this.authFile, '~/.infosvrauth_remoteCopy') + "\"";
+      } else {
+        execString = this.remoteConnectionString + " " + command.replace(this.authFile, '~/.infosvrauth_remoteCopy');
+      }
+      const result = shell.exec(execString, { "shell": "/bin/bash", silent: true });
       if (result.code !== 0) {
-        console.error("Unable to execute remote command: " + sshString);
+        console.error("Unable to execute remote command: " + execString);
         console.error(result.stderr);
       }
       return result;
@@ -341,23 +345,31 @@ class EnvironmentContext {
     this.authFile = file;
   }
 
-  /*
+  /**
    * Adds remote connection details to an existing authorisation file, that can then be used for 
    * connecting to an Information Server system remotely (requires SSH and key-based authentication
-   * to be pre-configured)
+   * to be pre-configured, or a local Docker container)
    *
    * @function
    * @param {string} file - authorisation file into which to append the remote connection details
+   * @param {string} accessType - type of access, either DOCKER or SSH
    * @param {string} username - OS username used for remote access
    * @param {string} privateKey - SSH private key file used for authentication
-   * @param {string} hostname - hostname (or IP) of the remote Information Server system
+   * @param {string} hostOrContainer - hostname (or IP) of the remote Information Server system (when accessType is SSH), or container name (when accessType is DOCKER)
    * @param {string} [port] - SSH port number for the remote Information Server system
    */
-  addRemoteConnectionDetailsToAuthFile(file, username, privateKey, hostname, port) {
-    let connectString = "ssh -i " + privateKey + " " + username + "@" + hostname;
-    let copyString = "scp -i " + privateKey + " __SOURCE__ " + username + "@" + hostname + ":__TARGET__";
-    if (typeof port !== 'undefined' && port !== null) {
-      connectString += " -p " + port;
+  addRemoteConnectionDetailsToAuthFile(file, accessType, username, privateKey, hostOrContainer, port) {
+    let connectString = "";
+    let copyString = "";
+    if (accessType === "SSH") {
+      connectString = "ssh -i " + privateKey + " " + username + "@" + hostOrContainer;
+      copyString = "scp -i " + privateKey + " __SOURCE__ " + username + "@" + hostOrContainer + ":__TARGET__";
+      if (typeof port !== 'undefined' && port !== null) {
+        connectString += " -p " + port;
+      }
+    } else if (accessType === "DOCKER") {
+      connectString = "docker exec -i " + hostOrContainer;
+      copyString = "docker cp __SOURCE__ " + hostOrContainer + ":__TARGET__";
     }
     this._remoteConnectString = connectString;
     this._remoteCopyString = copyString;

@@ -164,6 +164,21 @@ NOTE: this must be run from the Information Server environment directly (cannot 
 -   `password` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** password to use for authentication
 -   `file` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** file into which to store the details
 
+### addRemoteConnectionDetailsToAuthFile
+
+Adds remote connection details to an existing authorisation file, that can then be used for 
+connecting to an Information Server system remotely (requires SSH and key-based authentication
+to be pre-configured, or a local Docker container)
+
+**Parameters**
+
+-   `file` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** authorisation file into which to append the remote connection details
+-   `accessType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** type of access, either DOCKER or SSH
+-   `username` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** OS username used for remote access
+-   `privateKey` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** SSH private key file used for authentication
+-   `hostOrContainer` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** hostname (or IP) of the remote Information Server system (when accessType is SSH), or container name (when accessType is DOCKER)
+-   `port` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** SSH port number for the remote Information Server system
+
 ### authFile
 
 Get the fully-qualified location of the authorisation file (if any)
