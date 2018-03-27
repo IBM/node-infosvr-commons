@@ -108,7 +108,10 @@ class EnvironmentContext {
       }
       this._isConsolePort = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='is.console.port']", _versionXML)[0].getAttribute("value");
       this._tierToHosts.DOMAIN = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.server.host']", _versionXML)[0].getAttribute("value");
-      this._tierToHosts.ENGINE = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.agent.host']", _versionXML)[0].getAttribute("value");
+      const engineHost = this._select("/installreg:LocalInstallRegistry/installreg:PersistedVariables/installreg:PersistedVariable[@name='isf.agent.host']", _versionXML);
+      if (engineHost !== null && engineHost.length > 0) {
+        this._tierToHosts.ENGINE = engineHost[0].getAttribute("value");
+      }
     }
 
   }
@@ -384,7 +387,7 @@ class EnvironmentContext {
    */
   get authFile() {
     if (typeof this._authFile === 'undefined' || this._authFile === null || this._authFile === "") {
-      if (shell.test('-f', "~/.infosvrauth")) {
+      if (shell.test('-f', process.env.HOME + path.sep + ".infosvrauth")) {
         this._authFile = process.env.HOME + path.sep + ".infosvrauth";
       } else {
         throw new Error("ERROR: Unable to find an authorisation file.");
