@@ -56,6 +56,7 @@ class RestConnection {
       maxSockets: maxSockets,
       keepAlive: false
     });
+    this._session = false;
   }
 
   /**
@@ -104,6 +105,28 @@ class RestConnection {
    */
   get agent() {
     return this._agent;
+  }
+
+  /**
+   * Retrieves indication of whether a session is open (true) or not (false)
+   * @return {boolean}
+   */
+  get sessionStatus() {
+    return this._session;
+  }
+
+  /**
+   * Marks that a session has been opened
+   */
+  markSessionOpen() {
+    this._session = true;
+  }
+
+  /**
+   * Marks that the session has been closed
+   */
+  markSessionClosed() {
+    this._session = false;
   }
 
 }

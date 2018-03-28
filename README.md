@@ -10,6 +10,14 @@ Re-usable functions for inferring properties of and interacting with an IBM Info
 
 RestConnection class -- for handling connectivity to REST APIs
 
+**Parameters**
+
+-   `username`  
+-   `password`  
+-   `host`  
+-   `port`  
+-   `maxSockets`  
+
 **Examples**
 
 ```javascript
@@ -67,9 +75,28 @@ Get the https.Agent object for the REST connection
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
+### sessionStatus
+
+Retrieves indication of whether a session is open (true) or not (false)
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+
+### markSessionOpen
+
+Marks that a session has been opened
+
+### markSessionClosed
+
+Marks that the session has been closed
+
 ## EnvironmentContext
 
 EnvironmentContext class -- for encapsulating the context of an Information Server environment (NOTE: always run from Engine tier)
+
+**Parameters**
+
+-   `installLocation`  
+-   `authFile`  
 
 **Examples**
 
@@ -219,6 +246,8 @@ Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### getRestConnection
 
+-   **See: module:ibm-iis-commons~RestConnection**
+
 Get a RestConnection object allowing REST API's to connect to this environment
 
 **Parameters**
@@ -251,6 +280,6 @@ Remove the specified file from the Information Server environment
 
 **Parameters**
 
+-   `file`  
 -   `source` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `target` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `file`  
