@@ -7,7 +7,6 @@
     "index.js",
     "bin",
     "classes",
-    "utils",
     "LICENSE"
   ],
   "dependencies": {
@@ -51,10 +50,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cmgrote/ibm-iis-commons.git"
+    "url": "https://github.com/IBM/node-infosvr-commons.git"
   },
   "bugs": {
-    "url": "https://github.com/cmgrote/ibm-iis-commons/issues"
+    "url": "https://github.com/IBM/node-infosvr-commons/issues"
   },
-  "homepage": "https://github.com/cmgrote/ibm-iis-commons"
+  "homepage": "https://github.com/IBM/node-infosvr-commons"
 }

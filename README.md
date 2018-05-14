@@ -8,22 +8,22 @@ Objective of this module is to provide re-usable functionality and utilities for
 
 Creates an authorisation file for use with connecting to an Information Server environment.  Usage:
 
-```
-    node ./createInfoSvrAuthFile.js
-    		-u <user>
-    		[-f <file>]
-    		[-p <password>]
+```shell
+node ./createInfoSvrAuthFile.js
+	-u <user>
+	[-f <file>]
+	[-p <password>]
 ```
 
 By default (if not specified using the optional parameters), will create a file under `~/.infosvrauth` and will prompt the user to enter the password on the command-line.  The utility makes use of Information Server's `encrypt.sh` script, so this should be run from an Information Server node (a tier with `.../ASBNode/bin/encrypt.sh`).  Once created, the authorisation file can then be copied to any other system and used from any other system to provide the connectivity details necessary to connect remotely to the Information Server environment.
 
 If executing the script on the Information Server system itself is not an option, but you still want to create an authorisation file, your best bet is to manually create one using the following format:
 
-```
-    user=isadmin
-    password=
-    domain=is-server.ibm.com:9445
-    server=IS-SERVER.IBM.COM
+```properties
+user=isadmin
+password=
+domain=is-server.ibm.com:9445
+server=IS-SERVER.IBM.COM
 ```
 
 The password can be left blank (most utilities that make use of this authorisation file request the password to be provided separately anyway, either as another parameter or via a command-line prompt).  Ensure, however, that the `domain` property refers to the correct FQDN of your domain-tier host as well as the port, and that the `server` property refers to your engine tier's FQDN. 
