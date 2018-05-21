@@ -126,7 +126,7 @@ class EnvironmentContext {
       const aLines = authDetails.split("\n");
       for (let i = 0; i < aLines.length; i++) {
         if (aLines[i].startsWith(propertyNameInFile + "=")) {
-          this[objectProperty] = aLines[i].substring(aLines[i].indexOf("=") + 1);
+          this[objectProperty] = aLines[i].substring(aLines[i].indexOf("=") + 1).trim();
           i = aLines.length;
         }
       }
@@ -261,7 +261,7 @@ class EnvironmentContext {
       const aLines = authDetails.split("\n");
       for (let i = 0; i < aLines.length; i++) {
         if (aLines[i].startsWith("domain=")) {
-          this._tierToHosts.DOMAIN = aLines[i].split("=")[1].split(":")[0];
+          this._tierToHosts.DOMAIN = aLines[i].split("=")[1].split(":")[0].trim();
           i = aLines.length;
         }
       }
@@ -280,7 +280,7 @@ class EnvironmentContext {
       const aLines = authDetails.split("\n");
       for (let i = 0; i < aLines.length; i++) {
         if (aLines[i].startsWith("domain=")) {
-          this._isConsolePort = aLines[i].split("=")[1].split(":")[1];
+          this._isConsolePort = aLines[i].split("=")[1].split(":")[1].trim();
           i = aLines.length;
         }
       }
@@ -307,7 +307,7 @@ class EnvironmentContext {
       const aLines = authDetails.split("\n");
       for (let i = 0; i < aLines.length; i++) {
         if (aLines[i].startsWith("server=")) {
-          this._tierToHosts.ENGINE = aLines[i].split("=")[1];
+          this._tierToHosts.ENGINE = aLines[i].split("=")[1].trim();
           i = aLines.length;
         }
       }
